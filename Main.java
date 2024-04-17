@@ -1,4 +1,4 @@
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -12,12 +12,30 @@ public class Main {
        /** MISSION POWER GRID OPTIMIZATION BELOW **/
 
         System.out.println("##MISSION POWER GRID OPTIMIZATION##");
-        // TODO: Your code goes here
-        // You are expected to read the file given as the first command-line argument to read 
-        // the energy demands arriving per hour. Then, use this data to instantiate a 
-        // PowerGridOptimization object. You need to call getOptimalPowerGridSolutionDP() method
-        // of your PowerGridOptimization object to get the solution, and finally print it to STDOUT.
+
+        BufferedReader reader = new BufferedReader(new FileReader(args[0]));
+        ArrayList<Integer> amountOfEnergyDemandsArrivingPerHour = new ArrayList<>();
+        String[] parts = reader.readLine().trim().split(" ");
+        for (String part : parts) {
+            amountOfEnergyDemandsArrivingPerHour.add(Integer.parseInt(part));
+        }
+        PowerGridOptimization powerGridOptimization = new PowerGridOptimization(amountOfEnergyDemandsArrivingPerHour);
+        OptimalPowerGridSolution optimalPowerGridSolution = powerGridOptimization.getOptimalPowerGridSolutionDP();
+        // The total number of demanded gigawatts: 22
+        // Maximum number of satisfied gigawatts: 12
+        // Hours at which the battery bank should be discharged: 3, 5
+        // The number of unsatisfied gigawatts: 10
+        int sumOfHour = amountOfEnergyDemandsArrivingPerHour.stream().mapToInt(Integer::intValue).sum();
+        System.out.println("The total number of demanded gigawatts: " + sumOfHour);
+        System.out.println("Maximum number of satisfied gigawatts: " + optimalPowerGridSolution.getmaxNumberOfSatisfiedDemands());
+        String hours = optimalPowerGridSolution.getHoursToDischargeBatteriesForMaxEfficiency().toString();
+        hours = hours.substring(1, hours.length() - 1);
+        System.out.println("Hours at which the battery bank should be discharged: " + hours);
+        System.out.println("The number of unsatisfied gigawatts: " + (sumOfHour - optimalPowerGridSolution.getmaxNumberOfSatisfiedDemands()));
         System.out.println("##MISSION POWER GRID OPTIMIZATION COMPLETED##");
+        reader.close();
+
+
 
         /** MISSION ECO-MAINTENANCE BELOW **/
 

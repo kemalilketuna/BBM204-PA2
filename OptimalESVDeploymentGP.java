@@ -40,10 +40,39 @@ public class OptimalESVDeploymentGP
      * @return the minimum number of ESVs required using first fit approach over reversely sorted items.
      * Must return -1 if all tasks can't be satisfied by the available ESVs
      */
-    public int getMinNumESVsToDeploy(int maxNumberOfAvailableESVs, int maxESVCapacity)
-    {
-        // TODO: Your code goes here
-        return -1;
-    }
+    public int getMinNumESVsToDeploy(int maxNumberOfAvailableESVs, int maxESVCapacity) {
+        // Sort tasks in decreasing order
+        Collections.sort(maintenanceTaskEnergyDemands, Collections.reverseOrder());
 
+        // List to store each ESV and the sum of tasks assigned to it
+        ArrayList<Integer> esvCapacities = new ArrayList<>();
+
+        // Assign each task to an ESV
+        for (int demand : maintenanceTaskEnergyDemands) {
+            boolean placed = false;
+
+            // Try to place the task in already existing ESVs
+            for (int i = 0; i < esvCapacities.size(); i++) {
+                if (esvCapacities.get(i) + demand <= maxESVCapacity) {
+                    esvCapacities.set(i, esvCapacities.get(i) + demand);
+                    maintenanceTasksAssignedToESVs.get(i).add(demand);
+                    placed = true;
+                    break;
+                }
+            }
+
+            // If task can't be placed in existing ESVs, create a new one
+            if (!placed) {
+                if (esvCapacities.size() == maxNumberOfAvailableESVs) {
+                    return -1; // Not enough ESVs to handle all tasks
+                }
+                esvCapacities.add(demand);
+                ArrayList<Integer> newEsv = new ArrayList<>();
+                newEsv.add(demand);
+                maintenanceTasksAssignedToESVs.add(newEsv);
+            }
+        }
+
+        return esvCapacities.size(); // Return the number of ESVs used
+    }
 }

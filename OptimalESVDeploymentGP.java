@@ -44,6 +44,10 @@ public class OptimalESVDeploymentGP
         // Sort tasks in decreasing order
         Collections.sort(maintenanceTaskEnergyDemands, Collections.reverseOrder());
 
+        if(maintenanceTaskEnergyDemands.get(0) > maxESVCapacity) {
+            return -1; // Largest task can't be handled by any ESV
+        }
+
         // List to store each ESV and the sum of tasks assigned to it
         ArrayList<Integer> esvCapacities = new ArrayList<>();
 

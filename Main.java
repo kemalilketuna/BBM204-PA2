@@ -54,10 +54,14 @@ public class Main {
         // ESV 3 tasks: [70, 30]
         // ESV 4 tasks: [50, 40, 10]
         // ESV 5 tasks: [10]
-        System.out.println("The minimum number of ESVs to deploy: " + minNumESVsToDeploy);
-        ArrayList<ArrayList<Integer>> maintenanceTasksAssignedToESVs = optimalESVDeploymentGP.getMaintenanceTasksAssignedToESVs();
-        for (int i = 0; i < maintenanceTasksAssignedToESVs.size(); i++) {
-            System.out.println("ESV " + (i + 1) + " tasks: " + maintenanceTasksAssignedToESVs.get(i));
+        if (minNumESVsToDeploy == -1) {
+            System.out.println("Warning: Mission Eco-Maintenance Failed.");
+        }else{
+            System.out.println("The minimum number of ESVs to deploy: " + minNumESVsToDeploy);
+            ArrayList<ArrayList<Integer>> maintenanceTasksAssignedToESVs = optimalESVDeploymentGP.getMaintenanceTasksAssignedToESVs();
+            for (int i = 0; i < maintenanceTasksAssignedToESVs.size(); i++) {
+                System.out.println("ESV " + (i + 1) + " tasks: " + maintenanceTasksAssignedToESVs.get(i));
+            }
         }
         reader2.close();
         System.out.println("##MISSION ECO-MAINTENANCE COMPLETED##");

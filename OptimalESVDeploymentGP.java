@@ -41,21 +41,18 @@ public class OptimalESVDeploymentGP
      * Must return -1 if all tasks can't be satisfied by the available ESVs
      */
     public int getMinNumESVsToDeploy(int maxNumberOfAvailableESVs, int maxESVCapacity) {
-        // Sort tasks in decreasing order
         Collections.sort(maintenanceTaskEnergyDemands, Collections.reverseOrder());
 
         if(maintenanceTaskEnergyDemands.get(0) > maxESVCapacity) {
             return -1; // Largest task can't be handled by any ESV
         }
 
-        // List to store each ESV and the sum of tasks assigned to it
         ArrayList<Integer> esvCapacities = new ArrayList<>();
 
-        // Assign each task to an ESV
         for (int demand : maintenanceTaskEnergyDemands) {
             boolean placed = false;
 
-            // Try to place the task in already existing ESVs
+            // Try to place the task in existing ESVs
             for (int i = 0; i < esvCapacities.size(); i++) {
                 if (esvCapacities.get(i) + demand <= maxESVCapacity) {
                     esvCapacities.set(i, esvCapacities.get(i) + demand);
@@ -65,7 +62,7 @@ public class OptimalESVDeploymentGP
                 }
             }
 
-            // If task can't be placed in existing ESVs, create a new one
+            // Create a new ESV if the task can't be placed in any existing ESV
             if (!placed) {
                 if (esvCapacities.size() == maxNumberOfAvailableESVs) {
                     return -1; // Not enough ESVs to handle all tasks

@@ -34,26 +34,21 @@ public class PowerGridOptimization {
         SOL[0] = 0;
         HOURS.add(new ArrayList<>());  // Empty list for HOURS(0)
 
-        // Dynamic programming to calculate SOL and HOURS
         for (int j = 1; j <= N; j++) {
             int maxSol = Integer.MIN_VALUE;
             ArrayList<Integer> bestHours = new ArrayList<>();
 
             for (int i = 0; i < j; i++) {
-                int potentialSol = SOL[i] + Math.min(amountOfEnergyDemandsArrivingPerHour.get(j - 1), (j - i) * (j - i));  // Assuming P(j - i) is a method that gives power available from j-i
-
+                int potentialSol = SOL[i] + Math.min(amountOfEnergyDemandsArrivingPerHour.get(j - 1), (j - i) * (j - i));
                 if (potentialSol > maxSol) {
                     maxSol = potentialSol;
                     bestHours = new ArrayList<>(HOURS.get(i));
                     bestHours.add(j);
                 }
             }
-
             SOL[j] = maxSol;
             HOURS.add(bestHours);
         }
-
         return new OptimalPowerGridSolution(SOL[N], HOURS.get(N));
     }
-
 }
